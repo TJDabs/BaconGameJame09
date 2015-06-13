@@ -4,32 +4,43 @@ using UnityEngine.UI;
 
 public class PhotonConnectionManager : MonoBehaviour 
 {
-    [SerializeField] private Text _playerCount;
-    [SerializeField] private GameObject _playerPrefab;
+    private static PhotonConnectionManager _instance;
 
-	void Awake() 
+    public static PhotonConnectionManager Instance
     {
-        PhotonNetwork.logLevel = PhotonLogLevel.Full;
-        PhotonNetwork.ConnectUsingSettings(null);
+        get
+        {
+            return _instance;
+        }
+    }
 
+	private void Awake() 
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+
+        PhotonNetwork.logLevel = PhotonLogLevel.Informational;
+        PhotonNetwork.ConnectUsingSettings(null);
+        DontDestroyOnLoad(gameObject);
       //  PhotonNetworkingMessage.OnJoinedRoom
 	}
+
+    public void JoinRoom()
+    {
+        PhotonNetwork.JoinRandomRoom();
+    }
 
     private void OnGUI()
     {
         GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
     }
 
-
-    private void Update()
-    {
-        _playerCount.text = PhotonNetwork.countOfPlayers.ToString();
-    }
-
     private void OnJoinedLobby()
     {
         Debug.Log("Connected to Photon");
-        PhotonNetwork.JoinRandomRoom();
+        Application.LoadLevel("Login");
     }
 
     private void OnPhotonRandomJoinFailed()
@@ -41,6 +52,6 @@ public class PhotonConnectionManager : MonoBehaviour
     private void OnJoinedRoom()
     {
         Debug.Log("Joined Room");
-        PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+        SpawnManager.Instance.SpawnPlayer();
     }
 }
