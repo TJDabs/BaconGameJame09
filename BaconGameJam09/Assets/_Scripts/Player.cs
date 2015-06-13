@@ -7,6 +7,15 @@ public class Player : Photon.MonoBehaviour
     [SerializeField] private float _force = 1.0f;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _collideSound;
+    [SerializeField] private GameObject _camera;
+
+    private void Awake()
+    {
+        if (!photonView.isMine)
+        {
+            _camera.SetActive(false);
+        }
+    }
 
 	private void FixedUpdate()
 	{
