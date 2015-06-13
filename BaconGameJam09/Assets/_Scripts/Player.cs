@@ -5,6 +5,8 @@ public class Player : Photon.MonoBehaviour
 {
 	[SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private float _force = 1.0f;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _collideSound;
 
 	private void FixedUpdate()
 	{
@@ -17,4 +19,9 @@ public class Player : Photon.MonoBehaviour
             _rigidbody.AddForce(direction * _force);
         }
 	}
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        _audioSource.PlayOneShot(_collideSound);
+    }
 }
