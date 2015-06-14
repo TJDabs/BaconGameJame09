@@ -32,6 +32,12 @@ public class PhotonConnectionManager : MonoBehaviour
         PhotonNetwork.JoinRandomRoom();
     }
 
+    public void JoinOrCreateRoom(string roomName)
+    {
+        RoomOptions roomOptions = new RoomOptions() { maxPlayers = 4 };
+        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
+    }
+
     private void OnGUI()
     {
         GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
@@ -46,12 +52,14 @@ public class PhotonConnectionManager : MonoBehaviour
     private void OnPhotonRandomJoinFailed()
     {
         Debug.Log("Join failed creating");
-        PhotonNetwork.CreateRoom(null);
+        RoomOptions roomOptions = new RoomOptions() { maxPlayers = 4 };
+        PhotonNetwork.CreateRoom(System.Guid.NewGuid().ToString(), roomOptions, TypedLobby.Default);
     }
 
     private void OnJoinedRoom()
     {
         Debug.Log("Joined Room");
         SpawnManager.Instance.SpawnPlayer();
+        RacingGame.Instance.Setup();
     }
 }

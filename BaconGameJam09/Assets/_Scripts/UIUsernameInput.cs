@@ -5,11 +5,17 @@ using UnityEngine.UI;
 public class UIUsernameInput : MonoBehaviour
 {
     [SerializeField] private Button _enterButton;
+    [SerializeField] private Button _joinRandomButton;
+    [SerializeField] private Button _joinNamedButton;
     [SerializeField] private InputField _inputField;
+    [SerializeField] private InputField _roomNameInputField;
 
     private void Awake()
     {
         _enterButton.onClick.AddListener(EnterClicked);
+        _joinRandomButton.onClick.AddListener(JoinRandomClicked);
+        _joinNamedButton.onClick.AddListener(JoinNamedClicked);
+        PhotonNetwork.playerName = "SquidKid";
     }
 
     private void EnterClicked()
@@ -18,9 +24,21 @@ public class UIUsernameInput : MonoBehaviour
         if (_inputField.text != string.Empty)
         {
             PhotonNetwork.playerName = _inputField.text;
-            Application.LoadLevel("Game");
-            PhotonConnectionManager.Instance.JoinRoom();
         }
     }
-      
+
+    private void JoinRandomClicked()
+    {
+        Application.LoadLevel("Game");
+        PhotonConnectionManager.Instance.JoinRoom();
+    }
+
+    private void JoinNamedClicked()
+    {
+        if (_roomNameInputField.text != string.Empty)
+        {
+            Application.LoadLevel("Game");
+            PhotonConnectionManager.Instance.JoinOrCreateRoom(_roomNameInputField.text);
+        }
+    }
 }

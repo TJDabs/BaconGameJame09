@@ -25,7 +25,7 @@ public class Player : Photon.MonoBehaviour
 
 	private void FixedUpdate()
 	{
-        if (photonView.isMine)
+        if (photonView.isMine && RacingGame.Instance.GameStarted)
         {
             var direction = Vector3.zero;
             direction.x = Input.GetAxis("Horizontal");
@@ -88,5 +88,12 @@ public class Player : Photon.MonoBehaviour
         _rigidbody.drag = 1.0f;
     }
 
-
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.name == "FinishLine")
+        {
+            other.enabled = false;
+            RacingGame.Instance.EndGame(PhotonNetwork.playerName);
+        }
+    }
 }
