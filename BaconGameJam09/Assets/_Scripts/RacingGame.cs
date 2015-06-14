@@ -67,6 +67,7 @@ public class RacingGame : Photon.MonoBehaviour
     private void AgainButtonClicked()
     {
         Debug.Log("Clicked Again");
+        AudioManager.Instance.StopMusic();
         PhotonNetwork.LeaveRoom();
         Application.LoadLevel("Login");
     }
@@ -96,6 +97,9 @@ public class RacingGame : Photon.MonoBehaviour
     private void EndGameRPC(string winner)
     {
         Debug.Log("Winner is " + winner);
+        AudioManager.Instance.StopMusic();
+        AudioManager.Instance.PlayVictoryMusic();
+
         _goLabel.text = "Winner is " + winner + "!";
         _goLabel.enabled = true;
         GameStarted = false;

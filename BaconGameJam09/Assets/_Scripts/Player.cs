@@ -5,7 +5,8 @@ public class Player : Photon.MonoBehaviour
 {
 	[SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private float _force = 10.0f;
-    [SerializeField] private AudioClip _collideSound;
+    [SerializeField] private AudioClip _hurtSound;
+    [SerializeField] private AudioClip _shootSound;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private float _projectileSpeed = 10.0f;
@@ -17,7 +18,6 @@ public class Player : Photon.MonoBehaviour
     {
         if (photonView.isMine)
         {
-            Debug.Log("This is mine calleing setup");
             CameraController.Instance.Setup(transform);
         }
         _nameText.text = photonView.owner.name;
@@ -35,7 +35,6 @@ public class Player : Photon.MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Clicked Space");
                 photonView.RPC("ShootHarpoon", PhotonTargets.All);
             }
         }
@@ -70,6 +69,7 @@ public class Player : Photon.MonoBehaviour
     private void ShootHarpoon()
     {
         Debug.Log("Shoot RPC");
+        AudioManager.Instance.PlayClip(_shootSound);
         var projectile = Instantiate(_projectile, _spawnPoint.position, Quaternion.identity) as GameObject;
         projectile.GetComponent<Rigidbody2D>().AddForce(_spawnPoint.right * _projectileSpeed);
     }
@@ -78,6 +78,7 @@ public class Player : Photon.MonoBehaviour
     private void GotHitByHarpoon()
     {
         Debug.Log("Got Hit");
+        AudioManager.Instance.PlayClip(_hurtSound);
         StartCoroutine(SlowRoutine());
     }
 

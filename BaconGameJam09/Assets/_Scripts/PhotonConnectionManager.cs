@@ -59,6 +59,7 @@ public class PhotonConnectionManager : MonoBehaviour
     private void OnJoinedRoom()
     {
         Debug.Log("Joined Room");
+        AudioManager.Instance.PlayMusic();
         SpawnManager.Instance.SpawnPlayer();
         RacingGame.Instance.Setup();
     }
