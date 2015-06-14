@@ -38,8 +38,13 @@ public class RacingGame : Photon.MonoBehaviour
         _timer = 0;
         _runTimer = false;
         _againButton.onClick.AddListener(AgainButtonClicked);
+    }
+
+    public void TryShowStartButton()
+    {
         if (PhotonNetwork.isMasterClient)
         {
+            _startButton.gameObject.SetActive(true);
             _startButton.onClick.AddListener(StartButtonClicked);
         }
         else

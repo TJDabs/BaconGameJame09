@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour
 
     private Vector3 _min;
     private Vector3 _max;
-    private Quaternion _rotation;
 
     public bool IsFollowing = false;
 
@@ -43,7 +42,6 @@ public class CameraController : MonoBehaviour
         Player = player;
         _min = Bounds.bounds.min;
         _max = Bounds.bounds.max;
-        _rotation = transform.rotation;
         IsFollowing = true;
     }
 
@@ -70,7 +68,6 @@ public class CameraController : MonoBehaviour
             y = Mathf.Clamp(y, _min.y + Camera.orthographicSize, _max.y - Camera.orthographicSize);
 
             transform.position = new Vector3(x, y, transform.position.z);
-            //transform.rotation = _rotation;
         }
     }
 }

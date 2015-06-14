@@ -20,8 +20,8 @@ public class PhotonConnectionManager : MonoBehaviour
         {
             _instance = this;
         }
-
-        PhotonNetwork.logLevel = PhotonLogLevel.Informational;
+        PhotonNetwork.playerName = "SquidKid";
+        //PhotonNetwork.logLevel = PhotonLogLevel.Informational;
         PhotonNetwork.ConnectUsingSettings(null);
         DontDestroyOnLoad(gameObject);
       //  PhotonNetworkingMessage.OnJoinedRoom

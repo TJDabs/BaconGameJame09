@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
 
     private IEnumerator SpawnPlayerRoutine()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         foreach (var spawn in _spawnPoints)
         {
             var collided = Physics2D.OverlapCircleAll(spawn.position, 1, 1 << LayerMask.NameToLayer("Player"));

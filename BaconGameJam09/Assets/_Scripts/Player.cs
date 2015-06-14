@@ -21,6 +21,7 @@ public class Player : Photon.MonoBehaviour
             CameraController.Instance.Setup(transform);
         }
         _nameText.text = photonView.owner.name;
+        RacingGame.Instance.TryShowStartButton();
     }
 
 	private void FixedUpdate()
@@ -57,11 +58,13 @@ public class Player : Photon.MonoBehaviour
         if( _rigidbody.velocity.x > 0.2f )
         {
             _rigidbody.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3( 1, 1, 1 ), Time.deltaTime * 5);
+            _nameText.scale = Vector3.Lerp(_nameText.scale, new Vector3( 1, 1, 1 ), Time.deltaTime * 5);
 
         }
         else if( _rigidbody.velocity.x < -0.2f )
         {
             _rigidbody.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3( 1, -1, 1 ), Time.deltaTime * 5);
+            _nameText.scale = Vector3.Lerp(_nameText.scale, new Vector3( -1, 1, 1 ), Time.deltaTime * 5);
         }
     }
 
@@ -71,6 +74,7 @@ public class Player : Photon.MonoBehaviour
         Debug.Log("Shoot RPC");
         AudioManager.Instance.PlayClip(_shootSound);
         var projectile = Instantiate(_projectile, _spawnPoint.position, Quaternion.identity) as GameObject;
+        projectile.GetComponent<HarpoonProjectile>().OwnerId = photonView.ownerId;
         projectile.GetComponent<Rigidbody2D>().AddForce(_spawnPoint.right * _projectileSpeed);
     }
 
@@ -91,10 +95,13 @@ public class Player : Photon.MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "FinishLine")
+        if (photonView.isMine)
         {
-            other.enabled = false;
-            RacingGame.Instance.EndGame(PhotonNetwork.playerName);
+            if (other.name == "FinishLine")
+            {
+                other.enabled = false;
+                RacingGame.Instance.EndGame(PhotonNetwork.playerName);
+            }
         }
     }
 }

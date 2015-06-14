@@ -3,6 +3,8 @@ using System.Collections;
 
 public class HarpoonProjectile : MonoBehaviour
 {
+    public int OwnerId;
+
     private Rigidbody2D _rigidbody;
 
 	private void Start () 
@@ -29,7 +31,12 @@ public class HarpoonProjectile : MonoBehaviour
     {
         if (coll.transform.tag == "Player")
         {
-            coll.transform.GetComponent<PhotonView>().RPC("GotHitByHarpoon", PhotonTargets.All);
+            Debug.Log("Collided with Player");
+            if (coll.gameObject.GetComponent<PhotonView>().ownerId != OwnerId)
+            {
+                Debug.Log("Collided with player that is not me");
+                coll.transform.GetComponent<PhotonView>().RPC("GotHitByHarpoon", PhotonTargets.All);
+            }
         }
     }
 }
